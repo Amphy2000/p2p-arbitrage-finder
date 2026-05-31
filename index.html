@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P2P Arbi • Personal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
+        body { font-family: 'Inter', system_ui, sans-serif; }
+        .font-display { font-family: 'Space Grotesk', 'Inter', sans-serif; }
+        .opportunity-card { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        .opportunity-card:hover { transform: translateY(-2px); }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-200">
+    <div class="max-w-2xl mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <div class="flex items-center gap-x-3">
+                    <div class="w-11 h-11 bg-emerald-500 rounded-2xl flex items-center justify-center">
+                        <i class="fa-solid fa-chart-line text-white text-3xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-display text-4xl font-semibold tracking-tighter">P2P Arbi</h1>
+                        <p class="text-emerald-400 text-sm font-medium -mt-1">Personal Edge Finder</p>
+                    </div>
+                </div>
+            </div>
+            <div class="text-right">
+                <div class="text-xs text-zinc-500">ABUJA, NG</div>
+                <div class="text-emerald-400 text-sm font-medium">v1.0 • Personal</div>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-3 gap-3 mb-8">
+            <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-5">
+                <div class="text-emerald-400 text-xs font-medium tracking-widest">TOTAL EARNED</div>
+                <div id="total-profit" class="text-4xl font-semibold mt-1 profit">₦0</div>
+                <div class="text-[10px] text-zinc-500 mt-1">From logged flips</div>
+            </div>
+            <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-5">
+                <div class="text-emerald-400 text-xs font-medium tracking-widest">FLIPS LOGGED</div>
+                <div id="total-flips" class="text-4xl font-semibold mt-1">0</div>
+                <div class="text-[10px] text-zinc-500 mt-1">This session</div>
+            </div>
+            <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-5">
+                <div class="text-emerald-400 text-xs font-medium tracking-widest">AVG EDGE</div>
+                <div class="text-4xl font-semibold mt-1">2.1%</div>
+                <div class="text-[10px] text-zinc-500 mt-1">Per flip</div>
+            </div>
+        </div>
+
+        <!-- Opportunities -->
+        <div class="mb-6">
+            <div class="flex items-center justify-between mb-4 px-1">
+                <div>
+                    <h2 class="section-header font-semibold">Live Opportunities</h2>
+                    <p class="text-xs text-zinc-500">Updated moments ago • Nigeria P2P</p>
+                </div>
+                <button onclick="refreshOpportunities()" 
+                        class="flex items-center gap-x-2 text-sm bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 px-4 h-9 rounded-2xl text-emerald-400 transition-colors">
+                    <i class="fa-solid fa-sync-alt text-xs"></i>
+                    <span class="font-medium text-xs">REFRESH</span>
+                </button>
+            </div>
+
+            <div id="opportunities-list" class="space-y-3">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <!-- History -->
+        <div>
+            <div class="flex items-center justify-between mb-3 px-1">
+                <h2 class="section-header font-semibold">Your Flip History</h2>
+                <button onclick="clearHistory()" class="text-xs text-zinc-500 hover:text-red-400 transition-colors">Clear</button>
+            </div>
+            <div id="history-list" class="bg-zinc-900 border border-zinc-800 rounded-3xl p-2 min-h-[120px]">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <div class="mt-8 text-center">
+            <div class="text-[10px] text-zinc-500 px-6">
+                For personal tracking only. Always verify live rates on platforms before trading. Start small.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let opportunities = [
+            { id: 1, from: "Noones", to: "Binance P2P", buy: 1648, sell: 1685, profit: 2.25, pair: "USDT/NGN" },
+            { id: 2, from: "Bybit P2P", to: "Remitano", buy: 1652, sell: 1690, profit: 2.30, pair: "USDT/NGN" },
+            { id: 3, from: "Binance P2P", to: "Noones", buy: 1655, sell: 1688, profit: 2.00, pair: "USDT/NGN" },
+            { id: 4, from: "Remitano", to: "Bybit P2P", buy: 1645, sell: 1678, profit: 2.01, pair: "USDT/NGN" }
+        ];
+
+        let trades = [];
+        let totalProfit = 0;
+        let totalFlips = 0;
+
+        function loadFromStorage() {
+            const savedTrades = localStorage.getItem('p2p_trades');
+            const savedProfit = localStorage.getItem('p2p_total_profit');
+            const savedFlips = localStorage.getItem('p2p_total_flips');
+
+            if (savedTrades) trades = JSON.parse(savedTrades);
+            if (savedProfit) totalProfit = parseInt(savedProfit);
+            if (savedFlips) totalFlips = parseInt(savedFlips);
+
+            updateStats();
+            renderHistory();
+        }
+
+        function saveToStorage() {
+            localStorage.setItem('p2p_trades', JSON.stringify(trades));
+            localStorage.setItem('p2p_total_profit', totalProfit);
+            localStorage.setItem('p2p_total_flips', totalFlips);
+        }
+
+        function updateStats() {
+            document.getElementById('total-profit').textContent = '₦' + totalProfit.toLocaleString();
+            document.getElementById('total-flips').textContent = totalFlips;
+        }
+
+        function renderOpportunities() {
+            const container = document.getElementById('opportunities-list');
+            container.innerHTML = '';
+
+            opportunities.forEach(opp => {
+                const profitAmount = Math.round(2000 * (opp.profit / 100));
+                
+                const card = document.createElement('div');
+                card.className = `opportunity-card bg-zinc-900 border border-zinc-800 rounded-3xl p-5`;
+                
+                card.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <div class="flex items-center gap-x-2">
+                                <span class="font-semibold text-lg">${opp.from}</span>
+                                <i class="fa-solid fa-arrow-right text-emerald-400 text-xs"></i>
+                                <span class="font-semibold text-lg">${opp.to}</span>
+                            </div>
+                            <div class="text-xs text-zinc-400 mt-0.5">${opp.pair} • Buy @ ₦${opp.buy}</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-emerald-400 text-3xl font-semibold tracking-tighter">+${opp.profit}%</div>
+                            <div class="text-[10px] text-zinc-500 -mt-1">est. edge</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-5 flex items-center justify-between">
+                        <div>
+                            <div class="text-xs text-zinc-400">Potential on ₦2k</div>
+                            <div class="text-emerald-400 font-semibold">₦${profitAmount}</div>
+                        </div>
+                        
+                        <button onclick="logFlip(${opp.id})" 
+                                class="bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 transition-all text-white text-sm font-semibold px-6 h-11 rounded-2xl flex items-center justify-center gap-x-2">
+                            <i class="fa-solid fa-check-double text-xs"></i>
+                            <span>LOG FLIP</span>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function logFlip(oppId) {
+            const opp = opportunities.find(o => o.id === oppId);
+            if (!opp) return;
+
+            const amount = 2000;
+            const profit = Math.round(amount * (opp.profit / 100));
+
+            const trade = {
+                id: Date.now(),
+                time: new Date().toLocaleTimeString('en-NG', { hour: '2-digit', minute: '2-digit' }),
+                from: opp.from,
+                to: opp.to,
+                profit: profit,
+                amount: amount
+            };
+
+            trades.unshift(trade);
+            totalProfit += profit;
+            totalFlips++;
+
+            updateStats();
+            renderHistory();
+            saveToStorage();
+
+            setTimeout(() => {
+                alert(`✅ Flip Logged!\n\n${opp.from} → ${opp.to}\nProfit: ₦${profit}`);
+            }, 80);
+        }
+
+        function renderHistory() {
+            const container = document.getElementById('history-list');
+            
+            if (trades.length === 0) {
+                container.innerHTML = `
+                    <div class="px-4 py-8 text-center">
+                        <i class="fa-solid fa-clock-rotate-left text-3xl text-zinc-700 mb-3"></i>
+                        <div class="text-sm text-zinc-400">No flips logged yet</div>
+                        <div class="text-xs text-zinc-500 mt-1">Your logged trades will appear here</div>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '<div class="divide-y divide-zinc-800">';
+            
+            trades.slice(0, 6).forEach(trade => {
+                html += `
+                    <div class="px-4 py-[13px] flex items-center justify-between text-sm">
+                        <div class="flex items-center gap-x-3">
+                            <div class="text-emerald-400">
+                                <i class="fa-solid fa-check-circle"></i>
+                            </div>
+                            <div>
+                                <div class="font-medium">${trade.from} → ${trade.to}</div>
+                                <div class="text-[10px] text-zinc-500">${trade.time}</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-semibold text-emerald-400">+₦${trade.profit}</div>
+                            <div class="text-[10px] text-zinc-500">₦${trade.amount}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        function refreshOpportunities() {
+            const container = document.getElementById('opportunities-list');
+            container.style.transition = 'opacity 0.2s';
+            container.style.opacity = '0.3';
+
+            setTimeout(() => {
+                opportunities.forEach(opp => {
+                    opp.buy = Math.floor(opp.buy + (Math.random() * 12 - 6));
+                    opp.sell = Math.floor(opp.sell + (Math.random() * 14 - 7));
+                    opp.profit = parseFloat(((opp.sell - opp.buy) / opp.buy * 100).toFixed(2));
+                });
+
+                renderOpportunities();
+                container.style.opacity = '1';
+            }, 220);
+        }
+
+        function clearHistory() {
+            if (confirm('Clear all logged flips?')) {
+                trades = [];
+                totalProfit = 0;
+                totalFlips = 0;
+                localStorage.removeItem('p2p_trades');
+                localStorage.removeItem('p2p_total_profit');
+                localStorage.removeItem('p2p_total_flips');
+                
+                updateStats();
+                renderHistory();
+            }
+        }
+
+        function initApp() {
+            loadFromStorage();
+            renderOpportunities();
+        }
+
+        window.onload = initApp;
+    </script>
+</body>
+</html>
