@@ -11,7 +11,6 @@
         body { font-family: 'Inter', system_ui, sans-serif; }
         .font-display { font-family: 'Space Grotesk', 'Inter', sans-serif; }
         .section-card { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
-        .section-card:hover { transform: translateY(-1px); }
         .profit-positive { color: #22c55e; }
     </style>
 </head>
@@ -29,132 +28,123 @@
                 </div>
             </div>
             <div class="text-right">
-                <div class="inline-flex items-center gap-x-1.5 px-3 py-1 bg-zinc-900 rounded-2xl text-xs">
+                <div class="px-3 py-1 bg-zinc-900 rounded-2xl text-xs flex items-center gap-x-1.5">
                     <i class="fa-solid fa-map-marker-alt text-emerald-400"></i>
-                    <span class="font-medium">ABUJA, NG</span>
+                    <span class="font-medium">ABUJA</span>
                 </div>
+                <p class="text-[10px] text-zinc-500">Small capital only</p>
             </div>
         </div>
 
         <!-- Stats -->
         <div class="grid grid-cols-3 gap-3 mb-5">
             <div class="bg-zinc-900 rounded-3xl p-4">
-                <div class="text-emerald-400 text-xs font-medium tracking-wider mb-1 flex items-center gap-x-1.5"><i class="fa-solid fa-wallet"></i> TOTAL EARNED</div>
+                <div class="text-emerald-400 text-xs mb-1 flex items-center gap-x-1.5"><i class="fa-solid fa-wallet"></i> <span>TOTAL EARNED</span></div>
                 <div id="total-profit" class="text-3xl font-semibold tabular-nums">₦0</div>
             </div>
             <div class="bg-zinc-900 rounded-3xl p-4">
-                <div class="text-emerald-400 text-xs font-medium tracking-wider mb-1 flex items-center gap-x-1.5"><i class="fa-solid fa-sync"></i> FLIPS LOGGED</div>
+                <div class="text-emerald-400 text-xs mb-1 flex items-center gap-x-1.5"><i class="fa-solid fa-sync"></i> <span>FLIPS</span></div>
                 <div id="total-flips" class="text-3xl font-semibold tabular-nums">0</div>
             </div>
             <div class="bg-zinc-900 rounded-3xl p-4">
-                <div class="text-emerald-400 text-xs font-medium tracking-wider mb-1 flex items-center gap-x-1.5"><i class="fa-solid fa-chart-line"></i> AVG EDGE</div>
+                <div class="text-emerald-400 text-xs mb-1 flex items-center gap-x-1.5"><i class="fa-solid fa-chart-line"></i> <span>AVG EDGE</span></div>
                 <div id="avg-edge" class="text-3xl font-semibold tabular-nums">0.0%</div>
             </div>
         </div>
 
-        <!-- Live Rates (with clear fallback) -->
-        <div class="bg-zinc-900 rounded-3xl p-5 mb-5">
-            <div class="flex items-center justify-between mb-3">
-                <div class="flex items-center gap-x-2">
-                    <i class="fa-brands fa-bitcoin text-orange-400"></i>
-                    <span class="font-semibold">Live Binance P2P Rates</span>
-                </div>
-                <button onclick="fetchLiveRates()" class="text-xs flex items-center gap-x-2 px-4 py-2 bg-zinc-800 active:bg-zinc-700 rounded-2xl font-medium">
-                    <i class="fa-solid fa-sync"></i> <span>REFRESH</span>
-                </button>
+        <!-- How to actually make money with this (NEW) -->
+        <div class="bg-zinc-900 rounded-3xl p-4 mb-5 border border-emerald-900/30">
+            <div class="flex items-center gap-x-2 mb-3">
+                <i class="fa-solid fa-lightbulb text-emerald-400"></i>
+                <span class="font-semibold">How to use this to actually find & profit from opportunities (₦1k–2k)</span>
             </div>
-
-            <div class="grid grid-cols-2 gap-3">
-                <div class="bg-zinc-950 rounded-2xl p-4 border border-zinc-800">
-                    <div class="text-emerald-400 text-xs mb-1">BEST BUY PRICE</div>
-                    <div id="buy-price" class="text-3xl font-semibold tabular-nums">—</div>
-                    <div id="buy-info" class="text-xs text-zinc-400 mt-1">You pay this to buy USDT</div>
-                </div>
-                <div class="bg-zinc-950 rounded-2xl p-4 border border-zinc-800">
-                    <div class="text-rose-400 text-xs mb-1">BEST SELL PRICE</div>
-                    <div id="sell-price" class="text-3xl font-semibold tabular-nums">—</div>
-                    <div id="sell-info" class="text-xs text-zinc-400 mt-1">You receive this when selling</div>
-                </div>
-            </div>
-            <p class="text-center text-[10px] text-zinc-500 mt-3">Live data often blocked on mobile. Use the calculator below with rates from the apps.</p>
+            <ol class="text-sm space-y-2 text-zinc-300 list-decimal pl-5">
+                <li><strong>Open 2–3 P2P apps</strong> at the same time: Binance P2P + Remitano + Noones (or Bybit).</li>
+                <li><strong>Look for the same pair</strong> (usually USDT/NGN). Find the <span class="text-emerald-400">lowest price</span> someone is selling USDT for (you buy cheap) and the <span class="text-rose-400">highest price</span> someone is buying USDT for (you sell expensive).</li>
+                <li><strong>Plug the two rates</strong> into the calculator below + your capital + ~0.8% fees.</li>
+                <li>If it shows <span class="font-semibold text-emerald-400">> 1.8–2% net edge</span> after fees → do the flip and <strong>log it here</strong>.</li>
+                <li>Repeat. Track your real avg edge. Only scale size after 10+ good flips.</li>
+            </ol>
+            <p class="text-[10px] text-zinc-500 mt-3">This tool removes the math & tracks your discipline. The "opportunities" come from you checking the live apps quickly.</p>
         </div>
 
-        <!-- Smart Calculator -->
+        <!-- Live Rates (now clearly optional) -->
+        <div class="bg-zinc-900 rounded-3xl p-4 mb-5">
+            <div class="flex justify-between items-center mb-3">
+                <div class="font-semibold flex items-center gap-x-2"><i class="fa-brands fa-bitcoin text-orange-400"></i> <span>Optional: Binance P2P Snapshot</span></div>
+                <button onclick="fetchLiveRates()" class="text-xs px-3 py-1.5 bg-zinc-800 active:bg-zinc-700 rounded-2xl flex items-center gap-x-1.5">
+                    <i class="fa-solid fa-sync"></i> <span class="text-xs">Refresh</span>
+                </button>
+            </div>
+            <div class="grid grid-cols-2 gap-3 text-sm">
+                <div class="bg-zinc-950 rounded-2xl p-3">
+                    <div class="text-emerald-400 text-xs">Best BUY (you pay)</div>
+                    <div id="buy-price" class="text-2xl font-semibold">—</div>
+                    <div id="buy-info" class="text-[10px] text-zinc-500">Tap refresh • Use as reference</div>
+                </div>
+                <div class="bg-zinc-950 rounded-2xl p-3">
+                    <div class="text-rose-400 text-xs">Best SELL (you receive)</div>
+                    <div id="sell-price" class="text-2xl font-semibold">—</div>
+                    <div id="sell-info" class="text-[10px] text-zinc-500">Tap refresh • Use as reference</div>
+                </div>
+            </div>
+            <p class="text-[10px] text-center text-zinc-500 mt-2">Live fetch is optional & sometimes flaky. Main power = calculator + your eyes on the apps.</p>
+        </div>
+
+        <!-- Calculator -->
         <div class="bg-zinc-900 rounded-3xl p-5 mb-5">
-            <h2 class="font-semibold mb-4 flex items-center gap-x-2 text-lg"><i class="fa-solid fa-calculator text-emerald-400"></i> Smart Profit Calculator</h2>
+            <h3 class="font-semibold mb-4">Smart Profit Calculator</h3>
             
-            <div class="grid grid-cols-2 gap-x-4 gap-y-4">
+            <div class="grid grid-cols-2 gap-4 mb-4">
                 <div>
                     <label class="text-xs text-zinc-400">BUY RATE (₦ per USDT)</label>
-                    <input id="buy-rate" type="number" step="0.1" value="1645" class="mt-1 w-full bg-zinc-950 border border-zinc-700 rounded-2xl px-4 py-3 text-xl font-medium">
+                    <input id="buy-rate" type="number" step="0.1" value="1645" class="w-full bg-zinc-950 border border-zinc-800 rounded-2xl px-4 py-3 text-xl font-medium mt-1">
                 </div>
                 <div>
                     <label class="text-xs text-zinc-400">SELL RATE (₦ per USDT)</label>
-                    <input id="sell-rate" type="number" step="0.1" value="1670" class="mt-1 w-full bg-zinc-950 border border-zinc-700 rounded-2xl px-4 py-3 text-xl font-medium">
-                </div>
-                <div>
-                    <label class="text-xs text-zinc-400">YOUR CAPITAL (₦)</label>
-                    <input id="capital" type="number" value="2000" class="mt-1 w-full bg-zinc-950 border border-zinc-700 rounded-2xl px-4 py-3 text-xl font-medium">
-                </div>
-                <div>
-                    <label class="text-xs text-zinc-400">FEES (%)</label>
-                    <input id="fees" type="number" step="0.1" value="0.9" class="mt-1 w-full bg-zinc-950 border border-zinc-700 rounded-2xl px-4 py-3 text-xl font-medium">
+                    <input id="sell-rate" type="number" step="0.1" value="1670" class="w-full bg-zinc-950 border border-zinc-800 rounded-2xl px-4 py-3 text-xl font-medium mt-1">
                 </div>
             </div>
 
-            <button onclick="calculateProfit()" class="mt-4 w-full py-4 bg-emerald-500 active:bg-emerald-600 text-white font-bold rounded-2xl flex items-center justify-center gap-x-2 text-lg">
-                <i class="fa-solid fa-magic"></i> CALCULATE MY EDGE
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="text-xs text-zinc-400">Your Capital (₦)</label>
+                    <input id="capital" type="number" value="2000" class="w-full bg-zinc-950 border border-zinc-800 rounded-2xl px-4 py-3 text-xl font-medium mt-1">
+                </div>
+                <div>
+                    <label class="text-xs text-zinc-400">Fees (%)</label>
+                    <input id="fees" type="number" step="0.1" value="0.8" class="w-full bg-zinc-950 border border-zinc-800 rounded-2xl px-4 py-3 text-xl font-medium mt-1">
+                </div>
+            </div>
+
+            <button onclick="calculateProfit()" class="w-full py-3.5 bg-emerald-500 active:bg-emerald-600 text-white font-semibold rounded-2xl flex items-center justify-center gap-x-2 text-lg">
+                CALCULATE MY EDGE
             </button>
 
-            <div id="calc-result" class="hidden mt-4 p-4 bg-zinc-950 rounded-2xl border border-zinc-700 text-sm">
-                <div class="space-y-2">
+            <div id="calc-result" class="hidden mt-4 p-4 bg-zinc-950 rounded-2xl text-sm">
+                <div class="space-y-1">
                     <div class="flex justify-between"><span class="text-zinc-400">USDT received</span> <span id="usdt-received" class="font-semibold"></span></div>
                     <div class="flex justify-between"><span class="text-zinc-400">Gross after sell</span> <span id="gross-ngn" class="font-semibold"></span></div>
                     <div class="flex justify-between"><span class="text-zinc-400">Fees</span> <span id="fees-deducted" class="font-semibold text-rose-400"></span></div>
-                    <div class="flex justify-between pt-2 border-t border-zinc-700"><span class="text-emerald-400 font-medium">NET PROFIT</span> <span id="net-profit" class="font-bold text-xl text-emerald-400"></span></div>
-                    <div class="flex justify-between"><span class="text-emerald-400 font-medium">YOUR EDGE</span> <span id="roi" class="font-bold text-xl text-emerald-400"></span></div>
+                    <div class="flex justify-between pt-2 border-t border-zinc-800"><span class="text-emerald-400 font-medium">NET PROFIT</span> <span id="net-profit" class="font-bold text-xl text-emerald-400"></span></div>
+                    <div class="flex justify-between"><span class="text-emerald-400 font-medium">Your Edge</span> <span id="roi" class="font-bold text-xl text-emerald-400"></span></div>
                 </div>
-                <div class="flex gap-3 mt-4">
-                    <button onclick="logFromCalculator()" class="flex-1 py-3 bg-emerald-600 active:bg-emerald-700 rounded-2xl font-semibold text-sm">LOG THIS FLIP</button>
-                    <button onclick="useLiveRates()" class="flex-1 py-3 bg-zinc-800 active:bg-zinc-700 rounded-2xl text-sm">Use Live Rates</button>
-                </div>
+                <button onclick="logFromCalculator()" class="mt-4 w-full py-2.5 bg-emerald-600 active:bg-emerald-700 rounded-2xl text-sm font-medium flex items-center justify-center gap-x-2">
+                    <i class="fa-solid fa-check"></i> LOG THIS FLIP + UPDATE STATS
+                </button>
             </div>
-        </div>
-
-        <!-- How to actually find opportunities -->
-        <div class="bg-zinc-900 rounded-3xl p-5 mb-5">
-            <h2 class="font-semibold mb-3 flex items-center gap-x-2"><i class="fa-solid fa-search text-emerald-400"></i> How to Find Real Opportunities (2-3 mins)</h2>
-            <ol class="text-sm space-y-2 text-zinc-300 list-decimal pl-5">
-                <li>Open <strong>Binance P2P</strong> + <strong>Noones</strong> or <strong>Remitano</strong> side by side.</li>
-                <li>Check best <span class="text-emerald-400">BUY price</span> (lowest ₦/USDT) on one platform.</li>
-                <li>Check best <span class="text-rose-400">SELL price</span> (highest ₦/USDT) on another.</li>
-                <li>Paste both rates + your capital into the calculator above.</li>
-                <li>If <strong>net edge > 1.8%</strong> after fees → do the flip and LOG it here.</li>
-            </ol>
-            <p class="text-xs text-zinc-500 mt-3">The calculator tells you instantly if it's worth your small capital. No magic scanner needed — this workflow + tracking is how small capital guys win consistently.</p>
         </div>
 
         <!-- History -->
-        <div class="bg-zinc-900 rounded-3xl p-5">
-            <div class="flex justify-between items-center mb-3">
-                <span class="font-semibold flex items-center gap-x-2"><i class="fa-solid fa-history text-emerald-400"></i> Your Flip History</span>
-                <button onclick="clearHistory()" class="text-xs text-zinc-400 active:text-zinc-200">Clear</button>
+        <div class="bg-zinc-900 rounded-3xl p-4 mb-5">
+            <div class="flex justify-between mb-3">
+                <span class="font-semibold">Your Flip History</span>
+                <button onclick="clearHistory()" class="text-xs text-zinc-400">Clear</button>
             </div>
-            <div id="history-list" class="space-y-2 text-sm max-h-56 overflow-auto"></div>
-            
-            <div class="mt-4 pt-4 border-t border-zinc-700">
-                <div class="flex gap-2">
-                    <input id="quick-platform" value="Noones → Binance" class="flex-1 bg-zinc-950 border border-zinc-700 rounded-2xl px-4 py-2 text-sm">
-                    <input id="quick-profit" type="number" placeholder="Profit ₦" class="w-24 bg-zinc-950 border border-zinc-700 rounded-2xl px-3 py-2 text-sm">
-                    <button onclick="quickLogFlip()" class="px-5 bg-zinc-800 active:bg-zinc-700 rounded-2xl text-sm font-medium">LOG</button>
-                </div>
-            </div>
+            <div id="history-list" class="space-y-2 text-sm max-h-48 overflow-auto"></div>
         </div>
 
-        <div class="mt-6 text-center">
-            <p class="text-xs text-zinc-500">Start with ₦500–₦2000. Only flip when calculator shows >1.8% net edge. Track everything. Discipline > big edges.</p>
-            <p class="text-[10px] text-rose-400/70 mt-1">This is a helper tool. Always verify rates live yourself. P2P has risks.</p>
-        </div>
+        <div class="text-center text-[10px] text-zinc-500">Personal use • Verify every rate yourself • Start small • Track everything</div>
     </div>
 
     <script>
@@ -171,71 +161,56 @@
             updateStats();
             renderHistory();
         }
-
         function saveToStorage() {
             localStorage.setItem('p2p_trades_v2', JSON.stringify(trades));
             localStorage.setItem('p2p_total_profit_v2', totalProfit);
             localStorage.setItem('p2p_total_invested_v2', totalInvested);
         }
-
         function updateStats() {
             document.getElementById('total-profit').innerHTML = '₦' + totalProfit.toLocaleString();
             document.getElementById('total-flips').innerHTML = trades.length;
-            let avg = totalInvested > 0 ? (totalProfit / totalInvested) * 100 : 0;
-            if (avg === 0 && trades.length > 0) avg = trades.reduce((s,t)=>s+(t.edge||0),0)/trades.length;
+            let avg = totalInvested > 0 ? (totalProfit / totalInvested * 100) : 0;
             document.getElementById('avg-edge').innerHTML = avg.toFixed(1) + '%';
         }
-
         function renderHistory() {
             const el = document.getElementById('history-list');
             el.innerHTML = '';
             if (trades.length === 0) {
-                el.innerHTML = `<div class="text-center py-4 text-xs text-zinc-500">No flips logged yet.<br>Calculate an edge and log your first one.</div>`;
+                el.innerHTML = `<div class="text-center py-4 text-zinc-500 text-xs">No flips logged yet. Use the calculator after checking real rates in the apps.</div>`;
                 return;
             }
             [...trades].reverse().slice(0,6).forEach(t => {
                 const d = document.createElement('div');
-                d.className = 'flex justify-between bg-zinc-950 px-4 py-2.5 rounded-2xl';
-                d.innerHTML = `<div><div class="font-medium">${t.platform}</div><div class="text-xs text-zinc-500">${new Date(t.timestamp).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})} • ₦${t.amountInvested}</div></div><div class="text-right"><div class="profit-positive font-semibold">+₦${t.profit}</div><div class="text-emerald-400 text-xs">+${t.edge}%</div></div>`;
+                d.className = 'bg-zinc-950 px-3 py-2 rounded-2xl flex justify-between text-sm';
+                d.innerHTML = `<div><div class="font-medium">${t.platform}</div><div class="text-xs text-zinc-500">₦${t.amountInvested} • ${new Date(t.timestamp).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div></div><div class="text-right"><div class="profit-positive font-semibold">+₦${t.profit}</div><div class="text-emerald-400 text-xs">${t.edge}% edge</div></div>`;
                 el.appendChild(d);
             });
         }
 
         async function fetchLiveRates() {
-            const buyP = document.getElementById('buy-price');
-            const sellP = document.getElementById('sell-price');
-            const buyI = document.getElementById('buy-info');
-            const sellI = document.getElementById('sell-info');
-
-            buyP.innerHTML = '...'; sellP.innerHTML = '...';
-            buyI.innerHTML = 'Checking Binance...'; sellI.innerHTML = 'Checking Binance...';
-
+            const buyEl = document.getElementById('buy-price');
+            const sellEl = document.getElementById('sell-price');
+            buyEl.innerHTML = '...'; sellEl.innerHTML = '...';
             try {
                 const [buyRes, sellRes] = await Promise.all([
-                    fetch('https://p2p.binance.com/bapi/c2c/v2/friendly/c2c/adv/search', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({asset:'USDT',fiat:'NGN',tradeType:'BUY',page:1,rows:2})}),
-                    fetch('https://p2p.binance.com/bapi/c2c/v2/friendly/c2c/adv/search', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({asset:'USDT',fiat:'NGN',tradeType:'SELL',page:1,rows:2})})
+                    fetch('https://p2p.binance.com/bapi/c2c/v2/friendly/c2c/adv/search', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({asset:'USDT',fiat:'NGN',tradeType:'BUY',page:1,rows:1})}),
+                    fetch('https://p2p.binance.com/bapi/c2c/v2/friendly/c2c/adv/search', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({asset:'USDT',fiat:'NGN',tradeType:'SELL',page:1,rows:1})})
                 ]);
                 const buyData = await buyRes.json();
                 const sellData = await sellRes.json();
-
                 if (buyData.data?.[0]) {
                     const p = parseFloat(buyData.data[0].adv.price);
-                    buyP.innerHTML = p.toLocaleString();
-                    buyI.innerHTML = 'Best rate to buy USDT';
+                    buyEl.innerHTML = p.toLocaleString();
                     window.lastBuyPrice = p;
-                } else { buyP.innerHTML = '—'; buyI.innerHTML = 'No offers'; }
-
+                } else buyEl.innerHTML = '—';
                 if (sellData.data?.[0]) {
                     const p = parseFloat(sellData.data[0].adv.price);
-                    sellP.innerHTML = p.toLocaleString();
-                    sellI.innerHTML = 'Best rate to sell USDT';
+                    sellEl.innerHTML = p.toLocaleString();
                     window.lastSellPrice = p;
-                } else { sellP.innerHTML = '—'; sellI.innerHTML = 'No offers'; }
+                } else sellEl.innerHTML = '—';
             } catch(e) {
-                buyP.innerHTML = '—';
-                sellP.innerHTML = '—';
-                buyI.innerHTML = 'Blocked on mobile. Use calculator';
-                sellI.innerHTML = 'Open Binance P2P app directly';
+                buyEl.innerHTML = '—'; sellEl.innerHTML = '—';
+                alert('Live snapshot unavailable right now (common on mobile). Use the calculator with rates from your P2P apps.');
             }
         }
 
@@ -244,8 +219,7 @@
             const sell = parseFloat(document.getElementById('sell-rate').value);
             const cap = parseFloat(document.getElementById('capital').value);
             const feePct = parseFloat(document.getElementById('fees').value);
-
-            if (!buy || !sell || !cap) { alert('Enter valid rates and capital'); return; }
+            if (!buy || !sell || !cap) { alert('Enter valid numbers'); return; }
 
             const usdt = cap / buy;
             const gross = usdt * sell;
@@ -260,7 +234,7 @@
             document.getElementById('net-profit').innerHTML = (net>0?'+':'') + '₦' + net.toFixed(0);
             document.getElementById('roi').innerHTML = roi.toFixed(1) + '%';
 
-            window.currentCalc = {buy, sell, cap, feePct, net, roi};
+            window.currentCalc = {buy, sell, cap, feePct, net: Math.round(net), roi: parseFloat(roi.toFixed(1)), usdt};
         }
 
         function logFromCalculator() {
@@ -268,40 +242,17 @@
             const c = window.currentCalc;
             const trade = {
                 id: Date.now(), timestamp: new Date().toISOString(),
-                platform: `Calc ${c.buy}→${c.sell}`,
-                amountInvested: c.cap, profit: Math.round(c.net), edge: parseFloat(c.roi.toFixed(1))
+                platform: `Buy ${c.buy} → Sell ${c.sell}`,
+                amountInvested: c.cap, profit: c.net, edge: c.roi
             };
-            trades.push(trade); totalProfit += trade.profit; totalInvested += c.cap;
-            saveToStorage(); updateStats(); renderHistory();
-            document.getElementById('calc-result').style.background = '#052e16';
-            setTimeout(() => { 
-                document.getElementById('calc-result').style.background = '#18181b';
-                alert(`Logged! +₦${trade.profit} at ${trade.edge}% edge`);
-            }, 300);
-        }
-
-        function useLiveRates() {
-            if (window.lastBuyPrice && window.lastSellPrice) {
-                document.getElementById('buy-rate').value = window.lastBuyPrice;
-                document.getElementById('sell-rate').value = window.lastSellPrice;
-                calculateProfit();
-            } else {
-                alert('Refresh live rates first (or just use rates from the apps)');
-            }
-        }
-
-        function quickLogFlip() {
-            const plat = document.getElementById('quick-platform').value || 'Quick flip';
-            const prof = parseFloat(document.getElementById('quick-profit').value);
-            if (!prof || prof <= 0) return alert('Enter profit');
-            const inv = parseFloat(prompt('Capital used for this flip? (₦)', '2000')) || 2000;
-            const edge = inv > 0 ? (prof / inv * 100) : 0;
-
-            const t = {id:Date.now(), timestamp:new Date().toISOString(), platform:plat, amountInvested:inv, profit:Math.round(prof), edge:parseFloat(edge.toFixed(1))};
-            trades.push(t); totalProfit += t.profit; totalInvested += inv;
-            saveToStorage(); updateStats(); renderHistory();
-            document.getElementById('quick-profit').value = '';
-            alert(`Logged +₦${t.profit}`);
+            trades.push(trade);
+            totalProfit += c.net;
+            totalInvested += c.cap;
+            saveToStorage();
+            updateStats();
+            renderHistory();
+            document.getElementById('calc-result').classList.add('hidden');
+            alert(`Logged! +₦${c.net} at ${c.roi}% edge. Small consistent wins.`);
         }
 
         function clearHistory() {
@@ -313,9 +264,8 @@
 
         function init() {
             loadFromStorage();
-            setTimeout(fetchLiveRates, 600);
-            // Keyboard hint
-            document.addEventListener('keydown', e => { if (e.key === '/' ) { e.preventDefault(); document.getElementById('buy-rate').focus(); }});
+            // Auto try live rates once (but don't block user)
+            setTimeout(() => { try { fetchLiveRates(); } catch(e){} }, 1200);
         }
         window.onload = init;
     </script>
